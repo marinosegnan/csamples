@@ -1,0 +1,25 @@
+[H[2J[3JCurrent working dir: /home/marino/CProjects1
+hello listadt
+crea lista 100000 tempo= 0.015336
+itera lista 100000 tempo= 0.000699
+lista inserisci 10000 tempo= 0.225539
+400000 400000
+cerca el 90000 tempo= 0.000671
+ crea tree size 100000 tempo= 0.004346
+test navigazione left base right con funzioni simili a tutte le visite
+ naviga2 100000 tempo= 0.001102
+test navigazione left base right con next uniforme
+ naviga3 100000 tempo= 0.000852
+test navigazione left base right con parametro stato
+ naviga4 100000 tempo= 0.000589
+test navigazione left base right senza parametro stato
+ naviga5 100000 tempo= 0.000562
+tressizestart 100000
+ insert tree 10000 tempo= 0.002381
+tressizedopoinsert 108000
+ remove tree 10000 tempo= 0.001911
+tressize dopo remove 98000
+ binario navigo a el 90000 tempo= 0.001280
+trovo 460000 460000
+binario branch navigo a 90000 tempo= 0.000000
+trovo 460000 460000

@@ -1,0 +1,75 @@
+[H[2J[3Jnumber length: 6
+dumpi tobase input
+123456
+dumpi tobase parziale : 0
+7716
+dumpi risultato
+0
+dumpi tobase parziale : 4
+482
+dumpi risultato
+0
+4
+dumpi tobase parziale : 2
+30
+dumpi risultato
+0
+4
+2
+dumpi tobase parziale : 14
+1
+dumpi risultato
+0
+4
+2
+14
+dumpi tobase parziale : 1
+0
+dumpi risultato
+0
+4
+2
+14
+1
+provo
+0
+4
+2
+14
+1
+dumpi tobase input
+1
+14
+2
+4
+0
+dumpi tobase parziale : 6
+3
+3
+9
+dumpi risultato
+6
+dumpi tobase parziale : 5
+5
+2
+dumpi risultato
+6
+5
+dumpi tobase parziale : 2
+8
+dumpi risultato
+6
+5
+2
+dumpi tobase parziale : 8
+0
+dumpi risultato
+6
+5
+2
+8
+ottengo
+6
+5
+2
+8

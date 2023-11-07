@@ -1,0 +1,10 @@
+clear
+
+cc -I. -O4  avltree.c binario.c listadt.c visitebin.c adt.c main.c has.c tempi.c stringa.c -lm 
+mv a.out fast.out
+fast.out
+cc -I. -g avltree.c  binario.c listadt.c visitebin.c adt.c main.c has.c tempi.c stringa.c -lm 
+#a.out
+#valgrind --leak-check=yes a.out
+#fast.out
+#clang-format arra.c > a

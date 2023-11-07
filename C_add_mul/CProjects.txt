@@ -1,0 +1,1 @@
+Debug/addmul30.c.o Debug/test.c.o Debug/tempi.c.o Debug/arra.c.o Debug/addmul.c.o
