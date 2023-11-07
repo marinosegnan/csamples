@@ -1,0 +1,15 @@
+
+*.mk
+*.project
+*.workspace
+
+# Miscellaneous
+*.out
+*.json
+.c*
+.gdb*
+
+build*/
+Debug/
+SAVE*
+
