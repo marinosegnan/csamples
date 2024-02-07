@@ -390,7 +390,8 @@ node* elemat(node* n, long pos)
 
 node* elempos(node* n, long pos)
 {
-
+// trova elemento ad indice N, usa la dimensione del branch per dirigersi sx o dx
+// complessita': log(N)
     long lsize = n->left == NULL ? 0 : n->left->branchsize;
     if(pos == lsize) {
         return n;

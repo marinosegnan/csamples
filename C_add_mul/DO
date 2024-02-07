@@ -1,8 +1,12 @@
 clear
-cc -I. -O4 arra.c addmul.c addmul30.c  main.c tempi.c -lm -lgmp 
+cc -I. -O4 arra.c addmul.c alloca.c addmul30.c  main.c tempi.c -lm -lgmp 
 mv a.out fast.out
-cc -I. -g arra.c addmul.c addmul30.c main.c  tempi.c -lm -lgmp
-a.out
+cc -I. -g arra.c alloca.c addmul.c addmul30.c main.c  tempi.c -lm -lgmp
+#a.out
 #valgrind --leak-check=yes a.out
-#fast.out
+fast.out
 #clang-format arra.c > a
+
+
+#Use --track-origins=yes to see where uninitialised values come from
+
