@@ -1,4 +1,4 @@
-// to compile: gcc -g -std=c99 -w buggyprime.c -lm
+//      to compile: gcc -g -std=c99 -w buggyprime.c -lm
 
 #include <stdio.h>
 #include <stdlib.h>
