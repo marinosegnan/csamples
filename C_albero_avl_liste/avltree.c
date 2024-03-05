@@ -37,7 +37,7 @@ node* rightRotate(node* y)
     node* T2 = x->right;
 
     x->right = y;
-//    assert(y != NULL);
+    //    assert(y != NULL);
     if(y != NULL)
         y->up = x;
     y->left = T2;
@@ -246,10 +246,10 @@ int testavlinsertrandom()
 
     // prova a reinserire i nodi, ovviamente non succedera' NULLA
     // serve a vedere quanto ci va a cercarli
-      for (int aa=0; aa< 10; aa++)
-   for(adt** iniz = linea + SZ - 1; iniz > linea; iniz--) {
-        root = insertNode(root, *iniz);
-    }
+    for(int aa = 0; aa < 10; aa++)
+        for(adt** iniz = linea + SZ - 1; iniz > linea; iniz--) {
+            root = insertNode(root, *iniz);
+        }
     miotempo(" crea avl random quasi bilanciato 100000");
     printf("TREESIZE %ld\n", treeSize(root));
     printf("TREEHEIGHT avl %ld\n", treeHeight(root));

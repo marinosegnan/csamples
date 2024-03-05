@@ -5,14 +5,17 @@
 #include <coda.h>
 #include <coda2.h>
 #include <elements.h>
+#include <espr.h>
+#include <lisaddrof.h>
 #include <listaordinata.h>
+#include <multi.h>
 #include <pila.h>
 #include <stdio.h>
 #include <tempi.h>
 
 int numeri[100000];
 
-void inizia()
+void inittest()
 {
     for(int i = 0; i < 100000; i++) {
         numeri[i] = i;
@@ -40,16 +43,16 @@ int test_coda()
     append_el(prova, (void*)&numeri[2]);
     append_el(prova, (void*)&numeri[3]);
     printf("size coda = %d\n", prova->size);
-    printcoda(prova);
+    printcoda(prova, 'd');
     int* v = remove_el(prova);
     printf("elem coda = %d\n", *v);
-    printcoda(prova);
+    printcoda(prova, 'd');
     v = remove_el(prova);
     printf("elem coda = %d\n", *v);
-    printcoda(prova);
+    printcoda(prova, 'd');
     v = remove_el(prova);
     printf("elem coda = %d\n", *v);
-    printcoda(prova);
+    printcoda(prova, 'd');
     // v = remove_el(prova);
     //    printf("elem coda = %d\n", *v);
     return 0;
@@ -217,6 +220,36 @@ int test_el_ordnoh()
     printlistaint(start->start);
     return 0;
 }
+
+int test_merge()
+{
+    listaordinata* s1 = creaordinata(&compareElem, 1);
+    listaordinata* s2 = creaordinata(&compareElem, 1);
+    for(int i = 0; i < 20; i++) {
+        if(i % 3 == 0) {
+            insertho(s1, &numeri[i]);
+        } else {
+            insertho(s2, &numeri[i]);
+        }
+    }
+    listaordinata* s3 = mergenewh(s1, s2);
+    printlistaint(s3->start);
+    s1 = creaordinata(&compareElem, 0);
+    s2 = creaordinata(&compareElem, 0);
+    for(int i = 0; i < 20; i++) {
+        if(i % 3 == 0) {
+            inserto(s1, &numeri[i]);
+        } else {
+            inserto(s2, &numeri[i]);
+        }
+    }
+    s3 = mergenew(s1, s2);
+    printlistaint(s3->start);
+    printf("trovo 10? %d\n", findinlist(s3, &numeri[10]));
+    printf("trovo 20? %d\n", findinlist(s3, &numeri[20]));
+    return 0;
+}
+
 int test_el_tempo()
 {
     printf("creo 3 lista 10000 elementi\n");
@@ -340,21 +373,83 @@ int test_insert()
     return 0;
 }
 
+int test_addrof()
+{
+    elem* inizio = NULL;
+    insertordel(&inizio, &numeri[0]);
+    insertordel(&inizio, &numeri[2]);
+    insertordel(&inizio, &numeri[1]);
+    removeordel(&inizio, &numeri[0]);
+    removeordel(&inizio, &numeri[2]);
+    removeordel(&inizio, &numeri[1]);
+    printlistaint(inizio);
+    return 0;
+}
+
+int test_molti()
+{
+    molti* m1 = creamolti(&numeri[0], SIZE);
+    addchild(m1, &numeri[1]);
+    molti* tmp = addchild(m1, &numeri[2]);
+    addchild(tmp, &numeri[5]);
+    addchild(tmp, &numeri[6]);
+    addchild(tmp, &numeri[7]);
+    addchild(m1, &numeri[3]);
+    addchild(m1, &numeri[4]);
+    printmolti(m1, 0);
+    fprintf(stderr, "trasformato\n");
+    molti* start[2] = { m1 }; // init sempre come array terminato da NULL
+    nodo* nuovo = trasf(start);
+    printnodo(nuovo, 0);
+
+    return 0;
+}
+
+char* expsym[] = { "/", "*", "+", "-" };
+
+int test_espr()
+{
+    nodo* aa = creanodo(&numeri[0], NULL, NULL);
+    aa->left = creanodo(&numeri[0], NULL, NULL);
+    aa->left->left = creanodo(&numeri[4], NULL, NULL);
+    aa->left->right = creanodo(&numeri[5], NULL, NULL);
+    aa->right = creanodo(&numeri[0], NULL, NULL);
+    aa->right->left = creanodo(&numeri[8], NULL, NULL);
+    aa->right->right = creanodo(&numeri[9], NULL, NULL);
+    printf("VA=%d\n", eval(aa));
+    aa = creanodo(expsym[1], NULL, NULL);
+    aa->left = creanodo(expsym[2], NULL, NULL);
+    aa->left->left = creanodo("3", NULL, NULL);
+    aa->left->right = creanodo("4", NULL, NULL);
+    aa->right = creanodo(expsym[3], NULL, NULL);
+    aa->right->left = creanodo("5", NULL, NULL);
+    aa->right->right = creanodo("6", NULL, NULL);
+    coda* cc = convert(aa);
+    printcoda(cc, 's');
+    printf("VASTACK=%d\n", evallist(cc));
+    return 0;
+}
+
 int main(int argc, char** argv)
 {
-    bu();
- /*   inizia();
-    test_coda();
-    test_pila();
-    test_ric();
-    test_ric_el();
-    test_ric_el_head();
-    test_ric_el_head_nr();
-    test_coda2();
-    test_el_ord();
+    // bu();   testa buffer circolare
+    inittest();
+    /*
+     test_coda();
+     test_pila();
+     test_ric();
+     test_ric_el();
+     test_ric_el_head();
+     test_ric_el_head_nr();
+     test_coda2();
+     test_el_ord();
 
-    test_el_ordnoh();
-    test_el_tempo();
-    test_tree();
-    test_insert();*/
+     test_el_ordnoh();
+     test_el_tempo();
+     test_tree();
+     test_insert();*/
+    test_merge();
+    test_addrof();
+    test_molti();
+    test_espr();
 }

@@ -2,9 +2,9 @@
 #define LISTADT_H
 
 typedef struct adtel {
-  struct adtel *prev;
-  struct adtel *next;
-  adt *el;
+    struct adtel* prev;
+    struct adtel* next;
+    adt* el;
 } adelem;
 
 int testlistadt();

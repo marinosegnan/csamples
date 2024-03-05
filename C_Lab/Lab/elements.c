@@ -13,6 +13,9 @@ elem* crea(void* content)
 nodo* creanodo(void* content, nodo* left, nodo* right)
 {
     nodo* ret = malloc(sizeof(nodo));
+    if(ret == NULL) {
+        return NULL;
+    }
     ret->left = left;
     ret->right = right;
     ret->mytype = content;

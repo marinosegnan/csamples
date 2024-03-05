@@ -11,6 +11,6 @@ typedef struct {
 coda* create_coda();
 void append_el(coda* p, void* el);
 void* remove_el(coda* p);
-void printcoda(coda* c);
+void printcoda(coda* c, char format);
 
 #endif

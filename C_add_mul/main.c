@@ -2,10 +2,11 @@
 #include <debug.h>
 #include <gmp.h>
 #include <includere.h>
-#include <stdio.h>
 #include <math.h>
+#include <stdio.h>
 #include <string.h>
 #include <tempi.h>
+#include <stdlib.h>
 
 // digits e' la meta' scarsa di cifre di un long
 // cosi che la moltiplicazione di due numeri di massimo DIGITS non da' overflow
@@ -129,9 +130,9 @@ void runtest()
 
 int main()
 {
-    arr* nu = strtobasebits(molti("123456",1),4,DIGITS);
+    arr* nu = strtobasebits(molti("123456", 1), 4, DIGITS);
     dumpi(nu);
-    arr*vv=cambiabase(nu,10,1);
+    arr* vv = cambiabase(nu, 10, 1);
     dumpi(vv);
     runtest();
 
@@ -141,5 +142,6 @@ int main()
     arr* m4 = para(199, 211);
     //   printf("karat res %s\n", tostr(m4));
     verify(m4, k2);
+    printf("fine main\n");
     return 0;
 }

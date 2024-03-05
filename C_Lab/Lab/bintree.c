@@ -8,6 +8,8 @@
 // se la'lbero e' bilanciato, un albero di profondita' 100 (chiamate ricorsive) puo' contenere 2**100
 // nodi, cioe' circa 10**30
 // anche versione iteratore back and forth: vedi movebfN()
+// tramite iteratore sipuo' confrontare  cose differenti,
+// es pezzo di sottoalbero con lista, con determinata lunghezza
 
 typedef struct {
     // una struct che contiene un nodo e lo stato associato

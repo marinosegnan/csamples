@@ -4,13 +4,14 @@
 typedef struct elem {
     void* mytype;
     struct elem* next;
-} elem; //, lista ,*elemptr;  elem qui e' un alias per struct elem , elemptr e' aggiunto ma non serve
+} elem, *elemptr,
+    **addrptrel; //, lista ,*elemptr;  elem qui e' un alias per struct elem , elemptr e' aggiunto ma non serve
 
 typedef struct binelem {
     void* mytype;
     struct binelem* left;
     struct binelem* right;
-} nodo; /* ,*elemptr;  elem qui e' un alias per struct elem , elemptr e' aggiunto ma non serve*/
+} nodo, *nodoptr; /* ,*elemptr;  elem qui e' un alias per struct elem , elemptr e' aggiunto ma non serve*/
 
 elem* crea(void* content);
 nodo* creanodo(void* content, nodo* left, nodo* right);

@@ -6,7 +6,7 @@
 
 adelem* insertord(adelem* p, adt* nuovo)
 {
-    // inserisci assumendo elementi ordinati, 
+    // inserisci assumendo elementi ordinati,
     // molto dispendioso per lista lunga
     adelem* succ = p;
     while(succ != NULL && compare(succ->el, nuovo) < 0) {
@@ -149,13 +149,13 @@ int testlistatempiinsertremove()
     miotempo("crea lista 100000");
     miotempo(NULL);
     q = first;
-    while (q != NULL){
-        q=q->next;
+    while(q != NULL) {
+        q = q->next;
     }
     miotempo("itera lista 100000");
     miotempo(NULL);
-    
-    for(int count = 0; count < SZ/10; count++) {
+
+    for(int count = 0; count < SZ / 10; count++) {
         sprintf(buf, "%d", count + 2);
         // printf("%ld\n",count+2);
         insertord(first, createadt(buf, count + 2));

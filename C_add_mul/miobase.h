@@ -16,27 +16,26 @@
 #define POTENZA2 1073741824
 #define POTENZA22 1152921504606846976
 
-#define MAX(X, Y)  ((X) >( Y) ? (X) : (Y))
-#define MIN(X, Y) ((X) <( Y) ? (X) : (Y))
-#define DIF(X, Y) ((X) <( Y) ? (Y-X) : (X-Y))
+#define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
+#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
+#define DIF(X, Y) ((X) < (Y) ? (Y - X) : (X - Y))
 #define INTERI 1000
 
-typedef struct myarra{
+typedef struct myarra {
     long iniziali[INTERI];
     int len;     // max cifre usabili
     int power;   // potenza di digits ** 10 se serve per qualche caso
     int last;    // cifre usate effettivamente
     long base;   // col successivo ci dicono
-    long esp;  // in che base il numero e' codicato es 2 ** 4 (=16 cifre decimali)
+    long esp;    // in che base il numero e' codicato es 2 ** 4 (=16 cifre decimali)
     int piccole; // le meno significative sono all'inizio
-    long *cont;  // array di long che contiene il numero spezzato in digits pezzi
-  
+    long* cont;  // array di long che contiene il numero spezzato in digits pezzi
+
 } arr;
 
-extern  long  numerozero ;
+extern long numerozero;
 void libera(arr* n, int anche);
 arr* allocarr();
-long * procura(arr*numero,int size);
-void sistema(arr*numero,int size);
+long* procura(arr* numero, int size);
+void sistema(arr* numero, int size);
 void statis();
-

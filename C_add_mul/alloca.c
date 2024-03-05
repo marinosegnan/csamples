@@ -45,7 +45,7 @@ void sistema(arr* num, int newdim)
         }
         num->cont = nuovo;
     } else {
-        //c'e' spazio non serve riallocare
+        // c'e' spazio non serve riallocare
         num->len = newdim;
     }
 }

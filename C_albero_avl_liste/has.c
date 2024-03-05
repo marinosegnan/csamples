@@ -7,7 +7,7 @@ int primi2[] = { 2,  3,  5,  7,  11, 13, 17, 19, 23, 29,  31,  37,  41, 43,
                  47, 59, 67, 71, 73, 83, 87, 93, 97, 101, 103, 107, 109 };
 int primi[] = { 2,   3,   5,   7,   11,  13,  17,  19,  23,  29,  31,  37,  41,  43,  47,  59,  67,  71,  73,  83,
                 87,  93,  97,  101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181,
-191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263,269, 271, 277, 281, 283 };
+                191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283 };
 
 int len = (sizeof(primi) / sizeof(primi[0])) - 1;
 
@@ -19,9 +19,9 @@ unsigned long creahash(char* s)
     // a stessa lettera in posizioni diverse
     for(int r = 0; *s != '\0'; s++, r++) {
         unsigned int ind = *s - 'a' + r;
-     //   if(ind < 0) {
-    //        ind = len; // carattere non nelle a..z
-  //      }
+        //   if(ind < 0) {
+        //        ind = len; // carattere non nelle a..z
+        //      }
         res *= primi[ind % len];
     }
     return res; // res < 0 ? -res : res;
@@ -134,12 +134,12 @@ void stats()
             occupate += isto[i];
         }
     }
-     printf("Table size %d\n", TABE);
+    printf("Table size %d\n", TABE);
     printf("entries=%ld\n", quanti);
     double av = 0.0;
     for(int i = 1; i < ISTO; i++) {
         if(isto[i] != 0) {
-            av += (isto[i] * i * i) / (float) quanti;
+            av += (isto[i] * i * i) / (float)quanti;
         }
     }
     printf("avg. length =%f\n", av);

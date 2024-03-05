@@ -8,8 +8,8 @@
 #include <sys/time.h>
 #include <time.h>
 
-double diff(struct timeval *tv1, struct timeval *tv2);
+double diff(struct timeval* tv1, struct timeval* tv2);
 
-void miotempo(char *msg);
+void miotempo(char* msg);
 
 #endif

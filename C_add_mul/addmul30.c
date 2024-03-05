@@ -1,6 +1,6 @@
-#include <includere.h>
 #include <assert.h>
 #include <debug.h>
+#include <includere.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,7 +12,7 @@
  * prtendo da 2 cifre 2**30; e' veloce m ovviamente non si puo'usare piu' di una volta;
  * tuttvia basterebbe splittare il numero spezzando ognuno in due cifre di nuovo
  * per ritornare ala partenza
-*/
+ */
 
 void sumbase2(arr* nn1, arr* nn2)
 {
@@ -69,7 +69,7 @@ void sumbase2(arr* nn1, arr* nn2)
         long v2 = *p2++;
         long val = v1 + v2 + riporto;
         *attuale++ = val % fattore;
-        riporto = val >> 30;/// fattore;
+        riporto = val >> 30; /// fattore;
     }
     if(teor1 > teor2) {
         // coda op1
@@ -78,7 +78,7 @@ void sumbase2(arr* nn1, arr* nn2)
             long v1 = *p1++;
             long val = v1 + riporto;
             *attuale = val % fattore;
-            riporto = val >>30;/// fattore;
+            riporto = val >> 30; /// fattore;
             if(riporto == 0) {
                 break;
             }

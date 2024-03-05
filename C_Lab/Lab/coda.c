@@ -47,7 +47,7 @@ void* remove_el(coda* c)
     return ret;
 }
 
-void printcoda(coda* c)
+void printcoda(coda* c, char format)
 {
     printf("coda:\n");
     if(c->last == NULL) {
@@ -55,7 +55,11 @@ void printcoda(coda* c)
     } else {
         elem* curr = c->last->next;
         do {
-            printf("%d\n", *(int*)curr->mytype);
+            if(format == 'd') {
+                printf("%d\n", *(int*)(curr->mytype));
+            } else {
+                printf("%s\n", (char*)(curr->mytype));
+            }
             curr = curr->next;
         } while(curr != c->last->next);
     }

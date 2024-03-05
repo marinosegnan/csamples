@@ -17,7 +17,7 @@ arr* zero()
     zero->base = 1;
     zero->last = 1;
     zero->cont = zero->iniziali;
-    *(zero->cont) =0;
+    *(zero->cont) = 0;
     return zero;
 }
 
@@ -32,9 +32,10 @@ int digits(long base, int esp)
     return c1;
 }
 
-int divisore(arr*n){
-    int digit = digits(n->base,n->esp);
-    return pow(n->base,digit);
+int divisore(arr* n)
+{
+    int digit = digits(n->base, n->esp);
+    return pow(n->base, digit);
 }
 
 void aggiustaspazio(arr* numero, long b2, long e2)
