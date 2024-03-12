@@ -15,7 +15,7 @@ int* getprimes(int* result, int n);
 /* returns true if the given inger is prime, false otherwise */
 int isprime(int x);
 
-int main(int argc, char** argv)
+int mainDADEFINIRE(int argc, char** argv)
 {
 
     int n = 10; /* default */
