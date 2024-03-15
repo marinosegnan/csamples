@@ -2,6 +2,8 @@
 
 // #define MAXSQUARE 46340
 
+// per convertire un char* in int si puo' usare la funzione
+// atoi(char*s) definita in <string.h>
 
 // funzione errata in alcuni casi...
 
