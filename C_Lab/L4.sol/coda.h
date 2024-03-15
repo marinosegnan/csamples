@@ -1,4 +1,4 @@
-typedef struct charQueue* CharQueueADT;
+struct charQueue * CharQueueADT;  
 
 CharQueueADT mkQueue();
 void dsQueue(CharQueueADT* pq);
