@@ -1,6 +1,8 @@
 #include "coda.h"
 
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 #define INITIAL_CAPACITY 8
 
@@ -24,6 +26,7 @@ CharQueueADT mkQueue()
 
 void dsQueue(CharQueueADT* pq)
 {
+    // non libero tutta la coda!
     free((*pq)->a);
     free(*pq);
     *pq = NULL;
@@ -36,6 +39,26 @@ int dequeue(CharQueueADT q)
         ret = q->a[q->front];
         q->front = (q->front + 1) % q->capacity;
         q->size--;
+        if(q->size < q->capacity / 4) { // 4 e' una costante a piacere
+        // rimpicciolisci
+            char* nuovo = malloc((q->capacity / 2) * sizeof(char));
+        /*    for(int j = 0, k = q->front; j < q->size; j++) {
+              // piu' lento
+                nuovo[j] = q->a[k];
+                k = (k + 1) % q->capacity;
+            }*/
+            if (q->front <= q->rear){
+                memcpy(nuovo,q->a+q->front,q->rear-q->front);
+            } else{
+                memcpy(nuovo,q->a+q->front,q->capacity-q->front);
+                memcpy(nuovo+q->capacity-q->front,q->a,q->rear);
+            }
+            q->front = 0;
+            q->rear = q->size;
+            free(q->a);
+            q->a = nuovo;
+            q->capacity /= 2;
+        }
     }
     return ret;
 }
