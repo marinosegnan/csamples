@@ -33,3 +33,16 @@ void* pop(pila* p)
 }
 
 void* top(pila* p) { return p->top != NULL ? p->top->mytype : NULL; }
+
+void printpila(pila* p)
+{
+    printf("PILA: ");
+    elem* e = p->top;
+    while(e != NULL) {
+        nodo* nn = e->mytype;
+        int* n = nn->mytype;
+        printf(" %d ", *n);
+        e = e->next;
+    }
+    printf("\n");
+}

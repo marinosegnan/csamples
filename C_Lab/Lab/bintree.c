@@ -30,6 +30,18 @@ void dumps(pila* p)
     }
 }
 
+void dumps1(pila* p)
+{
+    // funziona per interi
+    printf("PILA\n");
+    elem* dd = p->top;
+    while(dd != NULL) {
+        nodo* child = (nodo*)dd->mytype;
+        printf("%d\n", *(int*)child->mytype);
+        dd = dd->next;
+    }
+}
+
 void preorderric(nodo* n)
 {
     // intuitiva, basta cambiare ordine per creare tutte le varianti
@@ -57,7 +69,7 @@ void libera(iterators* its)
     free(its);
 }
 
-int more(pila* p, int direzione)
+Posizione more(pila* p, int direzione)
 {
     // indica se ci sono ancora figli da esaminare a seconda se andiamo
     // avanti o indietro. senza avere bisogno di puntatore al padre,
@@ -73,18 +85,19 @@ int more(pila* p, int direzione)
             return DX;
         } else {
             printf("IMPOSSIBILE\n");
-            return NOD;
+            return -1;
         }
     } else { // siamo su root
-        return 0 - direzione;
+        return CORRENTE - direzione;
     }
 }
 
-void* movebfN(iterators* ite, int direzione)
+void* movebfN(iterators* ite, Direzione direzione)
 {
 
-    /* iteratore avanti e indietro ed elemento sul posto (1,-1,0)
-     * usa la solita pila ed un intero come stato.
+    /* iteratore avanti e indietro ed elemento sul posto (0,1,2)
+     * immaginado che l'albero sia ordinato, visita gli elementi in ordine crescente o decrescente
+     * usa la solita pila ed un enum intero come stato.
 
      * 0: entro nel nodo dall'alto
      * 1: dopo primo figlio
@@ -117,10 +130,10 @@ void* movebfN(iterators* ite, int direzione)
             }
             break;
         case DOPOUNO:
-            ite->stato = NODO;
+            ite->stato = DOPONODO;
             return curr->mytype;
             break;
-        case NODO:
+        case DOPONODO:
             if(direzione == AVANTI) {
                 if(curr->right != NULL) {
                     push(p, curr->right);

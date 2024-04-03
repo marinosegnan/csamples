@@ -14,7 +14,7 @@ typedef struct {
     // una struct che contiene un nodo e lo stato associato
     // questa vwrsione ha uno stato per elemento pila, in realta' non serve, basta un solo stato
     nodo* n;
-    nodostato state;
+    Nodostato state;
 } nodestate;
 
 nodestate* cre(nodo* no, int st)
@@ -32,7 +32,7 @@ iterator* createit(nodo* root)
     return ret;
 }
 
-int moreState(pila* p, int direzione)
+int moreState(pila* p, Direzione direzione)
 {
     // indica se ci sono ancora figli da esaminare a seconda se andiamo
     // avanti o indietro. senza avere bisogno di puntatore al padre,
@@ -51,14 +51,14 @@ int moreState(pila* p, int direzione)
             return DX;
         } else {
             printf("IMPOSSIBILE\n");
-            return NOD;
+            return -1;
         }
     } else {
-        return 0 - direzione;
+        return CORRENTE - direzione;
     }
 }
 
-void* movebf(iterator* ite, int direzione) // forward = -1,0,1
+void* movebf(iterator* ite, Direzione direzione) // forward = -1,0,1
 {
     nodestate* curr;
     while((curr = top(ite)) != NULL) {
@@ -81,10 +81,10 @@ void* movebf(iterator* ite, int direzione) // forward = -1,0,1
             curr->state = DOPOUNO;
             break;
         case DOPOUNO:
-            curr->state = NODO;
+            curr->state = DOPONODO;
             return curr->n->mytype;
             break;
-        case NODO:
+        case DOPONODO:
             if(direzione == AVANTI) {
                 if(curr->n->right != NULL) {
                     push(ite, cre(curr->n->right, INIZIO));
@@ -98,8 +98,8 @@ void* movebf(iterator* ite, int direzione) // forward = -1,0,1
             curr->state = DOPODUE;
             break;
         case DOPODUE:
-            int child = moreState(ite, direzione);
-            if(child == 0) {
+            Posizione child = moreState(ite, direzione);
+            if(child == NODO) {
                 if(direzione == AVANTI) {
                     child = SX;
                 } else {
@@ -152,9 +152,9 @@ void preorder(nodo* root)
             break;
         case DOPOUNO:
             printf("%d\n", *(int*)curr->n->mytype);
-            curr->state = NODO;
+            curr->state = DOPONODO;
             break;
-        case NODO:
+        case DOPONODO:
             if(curr->n->right != NULL) {
                 push(p, cre(curr->n->right, INIZIO));
             }
@@ -180,14 +180,14 @@ void postorder(nodo* root)
             if(curr->n->left != NULL) {
                 push(p, cre(curr->n->left, INIZIO));
             }
-            curr->state = NODO;
+            curr->state = DOPONODO;
             break;
         case DOPOUNO:
             // aggiungete la vostra chiamata preferita
             printf("%d\n", *(int*)curr->n->mytype);
             curr->state = DOPODUE;
             break;
-        case NODO:
+        case DOPONODO:
             if(curr->n->right != NULL) {
                 push(p, cre(curr->n->right, INIZIO));
             }
@@ -199,6 +199,93 @@ void postorder(nodo* root)
         }
     }
     free(p);
+}
+
+int sinistro(pila* p)
+{
+    // indica se ancora nodi da esaminare
+
+    if(p->size > 1) {
+        nodo* child = p->top->mytype;
+        nodo* parent = p->top->next->mytype;
+        return parent->left == child;
+    } else { // siamo su root
+        return 0;
+    }
+}
+
+void* nextUnoStato(iterators* ite)
+{
+    // iteratore preordercon uno stato solo, quando troniamo su (pop())
+    // se siamo sul sx dobbiamo visitare il nod dx
+    // la struttura si puo' generalizzare a previous() e anche a muoversi avanti indietro a piacere
+    // cambiando le operazioni dei diversi stati
+    pila* p = ite->p;
+    nodo* curr;
+    while((curr = top(p)) != NULL) {
+        switch(ite->stato) {
+        case INIZIO:
+            if(curr->left != NULL) {
+                push(p, curr->left);
+            } else {
+                ite->stato = DOPOUNO;
+            }
+            break;
+        case DOPOUNO:
+            ite->stato = DOPONODO;
+            return curr->mytype;
+            break;
+        case DOPONODO:
+            if(curr->right != NULL) {
+                push(p, curr->right);
+                ite->stato = INIZIO;
+            } else {
+                ite->stato = DOPODUE;
+            }
+            break;
+        case DOPODUE:
+            if(sinistro(p)) {
+                ite->stato = DOPOUNO;
+            }
+            pop(p);
+            break;
+        }
+    }
+    free(ite); // manca free dello stack
+    return NULL;
+}
+void diffset(nodo* n1, nodo* n2)
+{
+    // diff alberi tramite iteratore, assumendo elementi ordinati
+    iterators* it1 = createitstato(n1);
+    iterators* it2 = createitstato(n2);
+    int* c1 = nextUnoStato(it1);
+    int* c2 = nextUnoStato(it2);
+    while(c1 != NULL && c2 != NULL) {
+        int v1 = *c1;
+        int v2 = *c2;
+        if(v1 == v2) {
+            printf("UGUALI % d\n", v1);
+            c1 = nextUnoStato(it1);
+            c2 = nextUnoStato(it2);
+        } else if(v1 < v2) {
+            printf("manca in DUE % d\n", v1);
+            c1 = nextUnoStato(it1);
+        } else {
+            printf("manca in UNO % d\n", v2);
+            c2 = nextUnoStato(it2);
+        }
+    }
+    while(c1 != NULL) {
+        int v1 = *c1;
+        printf("manca in DUE % d\n", v1);
+        c1 = nextUnoStato(it1);
+    }
+    while(c2 != NULL) {
+        int v2 = *c2;
+        printf("manca in UNO % d\n", v2);
+        c2 = nextUnoStato(it2);
+    }
 }
 
 void* next(iterator* ite)
@@ -213,10 +300,10 @@ void* next(iterator* ite)
             }
             break;
         case DOPOUNO:
-            curr->state = NODO;
+            curr->state = DOPONODO;
             return curr->n->mytype;
             break;
-        case NODO:
+        case DOPONODO:
             curr->state = DOPODUE;
             if(curr->n->right != NULL) {
                 push(ite, cre(curr->n->right, INIZIO));
@@ -236,14 +323,14 @@ void* prev(iterator* ite)
     nodestate* curr;
     while((curr = top(ite)) != NULL) {
         switch(curr->state) {
-        case NODO:
+        case DOPONODO:
             curr->state = DOPODUE;
             if(curr->n->left != NULL) {
                 push(ite, cre(curr->n->left, INIZIO));
             }
             break;
         case DOPOUNO:
-            curr->state = NODO;
+            curr->state = DOPONODO;
             return curr->n->mytype;
             break;
         case INIZIO:

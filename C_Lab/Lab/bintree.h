@@ -4,22 +4,32 @@
 #include <elements.h>
 #include <pila.h>
 
-typedef enum { INIZIO, DOPOUNO, NODO, DOPODUE } nodostato;
-
-#define AVANTI 1
+/*
 #define INDIETRO -1
 #define CORRENTE 0
+#define AVANTI 1
 
 #define SX -1
-#define NOD 0
+#define NODO 0
 #define DX 1
+
+ * */
+typedef enum { SX, NODO, DX, ROOT, MORE, STOP } Posizione;
+typedef enum { INDIETRO, CORRENTE, AVANTI } Direzione;
+typedef enum { INIZIO, DOPOUNO, DOPONODO, DOPODUE } Nodostato;
+typedef enum { GINI, GUNO, GDUE, GTRE, GFINE } Gnodostato;
 
 typedef pila iterator;
 
 typedef struct {
     pila* p;
-    nodostato stato;
-} iterators; // con elemento opportuno la pila fa da iteratore per alberi
+    Nodostato stato;
+} iterators; // con attributo opportuno la pila fa da iteratore per alberi
+
+typedef struct {
+    pila* p;
+    Gnodostato stato;
+} giterators; // con attributo opportuno la pila fa da iteratore per alberi
 
 void preorder(nodo* root);
 void postorder(nodo* root);
@@ -32,11 +42,18 @@ int damm(nodo* treePtr, void* value);
 
 iterator* createit(nodo* root);
 iterators* createitstato(nodo* root);
+giterators* gcreateitstato(nodo* root);
 
 void* next(iterator* ite);
+void* nextUnoStato(iterators* ite);
 void* prev(iterator* ite);
-void* movebf(iterator* ite, int forward);
+void* movebf(iterator* ite, Direzione forward);
 
-void* movebfN(iterators* ite, int forward);
-
+void* movebfN(iterators* ite, Direzione forward);
+void* moveNLR(giterators* ite, Direzione direzione);
+void* moveLNR(giterators* ite, Direzione direzione);
+void* moveLRN(giterators* ite, Direzione direzione);
+void dumps(pila* p);
+void dumps1(pila* p);
+void diffset(nodo* n1, nodo* n2);
 #endif

@@ -309,16 +309,16 @@ int test_tree()
     it = createit(n7);
     printf("\niteratore back/forth\n");
     for(int h = 0; h < 5; h++) {
-        n = movebf(it, 1);
+        n = movebf(it, AVANTI);
         printf("%d\n", *n);
     }
     //  it = createit(n7);
     for(int h = 0; h < 3; h++) {
-        n = movebf(it, -1);
+        n = movebf(it, INDIETRO);
         printf("%d\n", *n);
     }
     for(int h = 0; h < 6; h++) {
-        if((n = movebf(it, 1)) != NULL) {
+        if((n = movebf(it, AVANTI)) != NULL) {
             printf("%d\n", *n);
 
         } else {
@@ -333,23 +333,128 @@ int test_tree()
     iterators* its = createitstato(n7);
     printf("\niteratore stato singolo back/forth\n");
     for(int h = 0; h < 5; h++) {
-        n = movebfN(its, 1);
+        n = movebfN(its, AVANTI);
         printf("%d\n", *n);
     }
     for(int h = 0; h < 3; h++) {
-        n = movebfN(its, -1);
+        n = movebfN(its, INDIETRO);
         printf("%d\n", *n);
     }
     for(int h = 0; h < 6; h++) {
-        if((n = movebfN(its, 1)) != NULL) {
+        if((n = movebfN(its, AVANTI)) != NULL) {
             printf("%d\n", *n);
 
         } else {
             printf("NULL\n");
         }
     }
+    printf("\niteratore stato singolo nextUnoStato\n");
+    iterators* itstemp = createitstato(n7);
+    for(int h = 0; h < 8; h++) {
+        if((n = nextUnoStato(itstemp)) != NULL) {
+            printf("%d\n", *n);
+        } else {
+            break;
+        }
+    }
+    nodo* n11 = creanodo(&numeri[3], NULL, NULL);
+    //  nodo* n12 = creanodo(&numeri[5], NULL, NULL);
+    nodo* n13 = creanodo(&numeri[4], n11, NULL);
+    nodo* n14 = creanodo(&numeri[7], NULL, NULL);
+    nodo* n15 = creanodo(&numeri[10], NULL, NULL);
+    nodo* n16 = creanodo(&numeri[8], n14, n15);
+    nodo* n17 = creanodo(&numeri[6], n13, n16);
+
+    diffset(n7, n17);
     return 0;
 }
+
+int test_tree1()
+{
+    //  nodo* nnn = creanodo(&numeri[52], NULL, NULL);
+    //    nodo* nn = creanodo(&numeri[51], NULL, nnn);
+    nodo* n1 = creanodo(&numeri[3], NULL, NULL);
+    nodo* n2 = creanodo(&numeri[5], NULL, NULL);
+    nodo* n3 = creanodo(&numeri[4], n1, n2);
+    nodo* n4 = creanodo(&numeri[7], NULL, NULL);
+    nodo* n5 = creanodo(&numeri[9], NULL, NULL);
+    nodo* n6 = creanodo(&numeri[8], n4, n5);
+    nodo* n7 = creanodo(&numeri[6], n3, n6);
+    int* n;
+    giterators* it = gcreateitstato(n7);
+    printf("\niteratore BACK/forth\n");
+    printf("\navanti 8\n");
+    for(int h = 0; h < 8; h++) {
+        if((n = moveNLR(it, AVANTI)) != NULL) {
+            printf("%d\n", *n);
+
+        } else {
+            printf("NULL\n");
+        }
+    }
+    it = gcreateitstato(n7);
+    printf("\n nuovo indietro 6\n");
+    for(int h = 0; h < 6; h++) {
+        if((n = moveNLR(it, INDIETRO)) != NULL) {
+            printf("%d\n", *n);
+
+        } else {
+            printf("NULL\n");
+        }
+    }
+    dumps1(it->p);
+    printf("\navanti 4\n");
+    for(int h = 0; h < 4; h++) {
+        if((n = moveNLR(it, AVANTI)) != NULL) {
+            printf("%d\n", *n);
+
+        } else {
+            printf("NULL\n");
+        }
+    }
+    /*   for (int h =0;h<4;h++){
+           n = move(it,1);
+            printf("%d ", *n);
+       }*/
+    printf("\nora postorder\n");
+
+    it = gcreateitstato(n7);
+
+    printf("\navanti 8\n");
+    for(int h = 0; h < 8; h++) {
+        if((n = moveLRN(it, AVANTI)) != NULL) {
+            printf("%d\n", *n);
+
+        } else {
+            printf("NULL\n");
+        }
+    }
+    it = gcreateitstato(n7);
+    printf("\n nuovo indietro 6\n");
+    for(int h = 0; h < 6; h++) {
+        if((n = moveLRN(it, INDIETRO)) != NULL) {
+            printf("ELEM %d\n", *n);
+
+        } else {
+            printf("NULL\n");
+        }
+        dumps1(it->p);
+    }
+    printf("\navanti 5\n");
+
+    for(int h = 0; h < 5; h++) {
+        if((n = moveLRN(it, AVANTI)) != NULL) {
+            printf("%d\n", *n);
+
+        } else {
+            printf("NULL\n");
+        }
+    }
+
+    printf("\nfine back/forth\n");
+    return 0;
+}
+
 int test_insert()
 {
     printf("testinsettree\n");
@@ -445,9 +550,10 @@ int main(int argc, char** argv)
      test_el_ord();
 
      test_el_ordnoh();
-     test_el_tempo();
-     test_tree();
-     test_insert();*/
+     test_el_tempo();*/
+    test_tree();
+    test_tree1();
+    test_insert();
     test_merge();
     test_addrof();
     test_molti();
