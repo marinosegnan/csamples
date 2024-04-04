@@ -32,111 +32,6 @@ iterator* createit(nodo* root)
     return ret;
 }
 
-int moreState(pila* p, Direzione direzione)
-{
-    // indica se ci sono ancora figli da esaminare a seconda se andiamo
-    // avanti o indietro. senza avere bisogno di puntatore al padre,
-    // basta vedere se siamo discendenti sx o dx, questo ci dice che se siamo
-    // a sx e andiamo avanti, dobbiamo visitare il dx e viceversa se andiamo indietro
-    // questa versione usa un nodetstate per ogni livello albero
-
-    if(p->size > 1) {
-        elem* dd = p->top;
-        elem* ee = dd->next;
-        nodo* child = ((nodestate*)(dd->mytype))->n;
-        nodo* parent = ((nodestate*)(ee->mytype))->n;
-        if(parent->left == child) {
-            return SX;
-        } else if(parent->right == child) {
-            return DX;
-        } else {
-            printf("IMPOSSIBILE\n");
-            return -1;
-        }
-    } else {
-        return CORRENTE - direzione;
-    }
-}
-
-void* movebf(iterator* ite, Direzione direzione) // forward = -1,0,1
-{
-    nodestate* curr;
-    while((curr = top(ite)) != NULL) {
-        //   dumps(ite);
-
-        switch(curr->state) {
-        case INIZIO:
-
-            if(direzione == AVANTI) {
-
-                if(curr->n->left != NULL) {
-                    push(ite, cre(curr->n->left, INIZIO));
-                }
-            } else if(direzione == INDIETRO) {
-
-                if(curr->n->right != NULL) {
-                    push(ite, cre(curr->n->right, INIZIO));
-                }
-            }
-            curr->state = DOPOUNO;
-            break;
-        case DOPOUNO:
-            curr->state = DOPONODO;
-            return curr->n->mytype;
-            break;
-        case DOPONODO:
-            if(direzione == AVANTI) {
-                if(curr->n->right != NULL) {
-                    push(ite, cre(curr->n->right, INIZIO));
-                }
-            } else if(direzione == INDIETRO) {
-
-                if(curr->n->left != NULL) {
-                    push(ite, cre(curr->n->left, INIZIO));
-                }
-            }
-            curr->state = DOPODUE;
-            break;
-        case DOPODUE:
-            Posizione child = moreState(ite, direzione);
-            if(child == NODO) {
-                if(direzione == AVANTI) {
-                    child = SX;
-                } else {
-                    child = DX;
-                }
-            }
-            pop(ite);
-            nodestate* tmp = top(ite);
-            if(tmp != NULL) {
-                if(direzione == AVANTI) {
-                    if(child == DX) { // si potrebbe usare ?:
-                        tmp->state = DOPODUE;
-                    } else {
-                        tmp->state = DOPOUNO;
-                    }
-
-                } else {
-                    if(child == SX) { // si potrebbe usare ?:
-                        tmp->state = DOPODUE;
-                    } else {
-                        tmp->state = DOPOUNO;
-                    }
-                }
-            } else {
-                free(ite);
-                return NULL;
-            }
-            if(tmp->state != DOPOUNO && tmp->state != DOPODUE) {
-                printf("ERRORE   %d\n", tmp->state);
-            }
-            break;
-        }
-    }
-    free(ite);
-    return NULL;
-}
-
 void preorder(nodo* root)
 { // figlio sx, nodo, figlio dx
     pila* p = create_pila();
@@ -254,6 +149,7 @@ void* nextUnoStato(iterators* ite)
     free(ite); // manca free dello stack
     return NULL;
 }
+
 void diffset(nodo* n1, nodo* n2)
 {
     // diff alberi tramite iteratore, assumendo elementi ordinati

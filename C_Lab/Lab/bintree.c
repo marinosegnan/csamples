@@ -30,7 +30,7 @@ void dumps(pila* p)
     }
 }
 
-void dumps1(pila* p)
+void dumps12(pila* p)
 {
     // funziona per interi
     printf("PILA\n");
@@ -67,107 +67,6 @@ void libera(iterators* its)
 {
     free(its->p);
     free(its);
-}
-
-Posizione more(pila* p, int direzione)
-{
-    // indica se ci sono ancora figli da esaminare a seconda se andiamo
-    // avanti o indietro. senza avere bisogno di puntatore al padre,
-    // basta vedere se siamo discendenti sx o dx, questo ci dice che se siamo
-    // a sx e andiamo avanti, dobbiamo visitare il dx e viceversa se andiamo indietro
-
-    if(p->size > 1) {
-        nodo* child = p->top->mytype;
-        nodo* parent = p->top->next->mytype;
-        if(parent->left == child) {
-            return SX;
-        } else if(parent->right == child) {
-            return DX;
-        } else {
-            printf("IMPOSSIBILE\n");
-            return -1;
-        }
-    } else { // siamo su root
-        return CORRENTE - direzione;
-    }
-}
-
-void* movebfN(iterators* ite, Direzione direzione)
-{
-
-    /* iteratore avanti e indietro ed elemento sul posto (0,1,2)
-     * immaginado che l'albero sia ordinato, visita gli elementi in ordine crescente o decrescente
-     * usa la solita pila ed un enum intero come stato.
-
-     * 0: entro nel nodo dall'alto
-     * 1: dopo primo figlio
-     * 2: dopo return del nodo
-     * 3: dopo secondo figlio (torna su)
-     *
-     * le operazioni sono simmetriche a seconda che vada avanti o indietro
-     * */
-    pila* p = ite->p;
-    if(direzione == CORRENTE) {
-        return top(p); // non spostarti, restituisci nodo corrente
-    }
-    nodo* curr;
-    while((curr = top(p)) != NULL) {
-        //   dumps(ite);   stampa debug
-        switch(ite->stato) {
-        case INIZIO:
-            if(direzione == AVANTI) {
-                if(curr->left != NULL) {
-                    push(p, curr->left);
-                } else {
-                    ite->stato = DOPOUNO; // manca primo figlio, passo al nodo
-                }
-            } else {
-                if(curr->right != NULL) {
-                    push(p, curr->right);
-                } else {
-                    ite->stato = DOPOUNO; // manca primo figlio, passo al nodo
-                }
-            }
-            break;
-        case DOPOUNO:
-            ite->stato = DOPONODO;
-            return curr->mytype;
-            break;
-        case DOPONODO:
-            if(direzione == AVANTI) {
-                if(curr->right != NULL) {
-                    push(p, curr->right);
-                    ite->stato = INIZIO;
-                } else {
-                    ite->stato = DOPODUE; // manca secondo figlio, torno su
-                }
-            } else {
-                if(curr->left != NULL) {
-                    push(p, curr->left);
-                    ite->stato = INIZIO;
-                } else {
-                    ite->stato = DOPODUE; // manca secondo figlio, torno su
-                }
-            }
-            break;
-        case DOPODUE: // torno su
-            int ancora = more(p, direzione);
-            pop(p);
-            nodo* tmp = top(p);
-            if(tmp != NULL) {
-                ite->stato = direzione == ancora ? DOPODUE : DOPOUNO;
-            } else {
-                libera(ite);
-                return NULL;
-            }
-            if(ite->stato != DOPOUNO && ite->stato != DOPODUE) {
-                printf("ERRORE stato iteratore  %d\n", ite->stato);
-            }
-            break;
-        }
-    }
-    libera(ite);
-    return NULL;
 }
 
 int insert(nodo* root, void* val)
