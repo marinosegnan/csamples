@@ -15,7 +15,6 @@ typedef struct {
     Nodostato stato;
 } iterators; // con attributo opportuno la pila fa da iteratore per alberi
 
-
 void preorder(nodo* root);
 void postorder(nodo* root);
 void preorderric(nodo* n);
@@ -28,10 +27,11 @@ int damm(nodo* treePtr, void* value);
 iterator* createit(nodo* root);
 iterators* createitstato(nodo* root);
 
-
 void* next(iterator* ite);
 void* nextUnoStato(iterators* ite);
 void* prev(iterator* ite);
 void dumps(pila* p);
 void diffset(nodo* n1, nodo* n2);
+
+void stampaint(nodo* n, int inde);
 #endif

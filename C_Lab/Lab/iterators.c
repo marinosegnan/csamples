@@ -1,9 +1,27 @@
+#include "iterators.h"
+
+#include <limits.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "iterators.h"
+costrelem* creast(long sz)
+{
+    costrelem* ret = malloc(sizeof(costrelem));
+    ret->treesize = sz;
+    ret->current = NULL;
+    return ret;
+}
+costrstato* creatore()
+{
+    costrstato* ret = malloc(sizeof(giterators));
+    ret->p = create_pila();
+    push(ret->p, creast(10000));
+    ret->sequence = 0;
+    return ret;
+}
 
-giterators* gcreateitstato(nodo* root)
+giterators* gcreateit(nodo* root)
 {
     giterators* ret = malloc(sizeof(giterators));
     ret->p = create_pila();
@@ -27,6 +45,8 @@ giterators* gcreateitmodo(nodo* root, Gmodo modo, Direzione direzione)
 
 void glibera(giterators* its)
 {
+    // assumo che ci sia solo la root (un nodo)
+    free(its->p->top);
     free(its->p);
     free(its);
 }
@@ -146,7 +166,7 @@ void* moveLRN(giterators* ite, Direzione direzione)
 
 void* move(giterators* ite)
 {
-    //riassume i tre modi di visita, piu' avanti ed indietro
+    // riassume i tre modi di visita, piu' avanti ed indietro
     pila* p = ite->p;
     nodo* curr = top(p);
     Direzione direzione = ite->direzione;
@@ -166,7 +186,8 @@ void* move(giterators* ite)
                 ite->stato = GUNO;
                 return curr->mytype;
                 break;
-                default:break;
+            default:
+                break;
             }
             break;
         case GUNO:
@@ -181,7 +202,8 @@ void* move(giterators* ite)
             case LRN:
                 stato = transizione(p, direzione == AVANTI ? curr->right : curr->left, GINI, GDUE);
                 break;
-                 default:break;
+            default:
+                break;
             }
             break;
         case GDUE:
@@ -194,7 +216,8 @@ void* move(giterators* ite)
                 ite->stato = GTRE;
                 return curr->mytype;
                 break;
-                 default:break;
+            default:
+                break;
             }
             break;
         case GTRE: // torno su
@@ -208,7 +231,8 @@ void* move(giterators* ite)
             case LRN:
                 stato = fineiter(p, direzione, GUNO, GDUE);
                 break;
-                 default:break;
+            default:
+                break;
             }
             break;
         case GFINE: // su root fine iterazione
@@ -217,4 +241,95 @@ void* move(giterators* ite)
     }
     glibera(ite);
     return NULL;
+}
+
+long subtreesize(long pos)
+{ // volendo da ottimizzare con shift etc
+    for(long esp = 2; esp < 32; esp++) {
+        long pot = (long)powl(2, esp);
+        long pp = (pot / 2) - 1;
+        long tmp = pos - pp;
+        long ts = tmp % pot;
+        if(ts == 0) {
+            return pp;
+        }
+    }
+    return -1;
+}
+
+nodo* ciclo(long* i, long fine) // fine e' quanti max discendmti creare qui
+{
+    nodo* ret = NULL;
+    long limit = fine < LONG_MAX ? fine : LONG_MAX;
+    while(*i < limit) {
+        if(*i % 2 == 0) { // foglia   0,2,4,6,8....
+            ret = creanodo((void*)(*i)++, NULL, NULL);
+        } else {
+            long sts = subtreesize(*i); // nodo interno (sottoalbero)
+            if(sts > 0) {
+                ret = creanodo((void*)*i, ret, NULL);
+                ret->right = ciclo(i, ++(*i) + sts);
+            }
+        }
+    }
+    return ret;
+}
+
+nodo* crealbero()
+{
+    long i = 0;
+    nodo* ret = ciclo(&i, 32);
+    printf("NUMERI\n");
+    return ret;
+}
+
+nodo* aggiungi(costrstato* ite, long val)
+{
+    long* i = &ite->sequence;
+    costrelem* co = top(ite->p);
+    long limit = co->treesize;
+    nodo* ret = co->current;
+    if(*i < limit) {
+        if(*i % 2 == 0) { // foglia   0,2,4,6,8....
+            ret = creanodo((void*)(*i)++, NULL, NULL);
+            co->current = ret;
+        } else {
+            long sts = subtreesize(*i); // nodo interno (sottoalbero)
+            if(sts > 0) {
+                ret = creanodo((void*)*i, ret, NULL);
+                co->current = ret;
+                costrelem* addi = creast(++(*i) + sts);
+                push(ite->p, addi);
+            }
+        }
+    }
+    while(*i >= limit) { // evt collega discendenti dx
+        costrelem* addi = pop(ite->p);
+        costrelem* co = top(ite->p);
+        nodo* ff = co->current;
+        ff->right = addi->current;
+        limit = co->treesize; //< LONG_MAX ? co->treesize : LONG_MAX;
+    }
+    return ret;
+}
+
+nodo* base(pila* p)
+{
+    costrelem* co = NULL;
+    while(p->size > 1) { // concatena sottoalberi destri
+        costrelem* addi = pop(p);
+        co = top(p);
+        co->current->right = addi->current;
+    }
+    co = top(p);
+    return co->current;
+}
+
+nodo* crealberocostr()
+{
+    costrstato* ite = creatore();
+    for(long i = 0; i < 31; i++) {
+        aggiungi(ite, i);
+    }
+    return base(ite->p);
 }

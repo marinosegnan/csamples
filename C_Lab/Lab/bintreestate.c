@@ -46,7 +46,7 @@ void preorder(nodo* root)
             curr->state = DOPOUNO;
             break;
         case DOPOUNO:
-            printf("%d\n", *(int*)curr->n->mytype);
+            //     printf("%d\n", *(int*)curr->n->mytype);
             curr->state = DOPONODO;
             break;
         case DOPONODO:

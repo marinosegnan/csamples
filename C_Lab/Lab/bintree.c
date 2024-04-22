@@ -135,3 +135,17 @@ int damm(nodo* treePtr, void* value)
     *nodePtrPtr = creanodo(value, NULL, NULL);
     return 1;
 }
+
+static char buf[256] = "";
+void stampaint(nodo* n, int inde)
+{
+    if(n == NULL) {
+        return;
+    }
+    stampaint(n->left, inde + 4);
+    for(int i = 0; i < 256; i++)
+        buf[i] = ' ';
+    sprintf(buf + inde, "%ld", (long)n->mytype);
+    printf("%s\n", buf);
+    stampaint(n->right, inde + 4);
+}

@@ -1,5 +1,6 @@
+#include "dynstring.h"
+
 #include <bintree.h>
-#include <iterators.h>
 #include <catena.h>
 #include <catenaheadord.h>
 #include <catenaord.h>
@@ -7,17 +8,21 @@
 #include <coda2.h>
 #include <elements.h>
 #include <espr.h>
+#include <iterators.h>
 #include <lisaddrof.h>
 #include <listaordinata.h>
 #include <multi.h>
 #include <pila.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <tempi.h>
 
 int numeri[100000];
 
-nodo * creatree(){
-     nodo* n1 = creanodo(&numeri[3], NULL, NULL);
+nodo* creatree()
+{
+    nodo* n1 = creanodo(&numeri[3], NULL, NULL);
     nodo* n2 = creanodo(&numeri[5], NULL, NULL);
     nodo* n3 = creanodo(&numeri[4], n1, n2);
     nodo* n4 = creanodo(&numeri[7], NULL, NULL);
@@ -310,7 +315,7 @@ int test_tree()
         printf("%d ", *n);
     }
     printf("\nfine iteratore\n");
- 
+
     printf("\niteratore stato singolo nextUnoStato\n");
     iterators* itstemp = createitstato(n7);
     for(int h = 0; h < 8; h++) {
@@ -336,7 +341,7 @@ int test_tree1()
 {
     nodo* n7 = creatree();
     int* n;
-    giterators* it = gcreateitstato(n7);
+    giterators* it = gcreateit(n7);
     printf("\niteratore BACK/forth\n");
     printf("\navanti 8\n");
     for(int h = 0; h < 8; h++) {
@@ -347,7 +352,7 @@ int test_tree1()
             printf("NULL\n");
         }
     }
-    it = gcreateitstato(n7);
+    it = gcreateit(n7);
     printf("\n nuovo indietro 6\n");
     for(int h = 0; h < 6; h++) {
         if((n = moveNLR(it, INDIETRO)) != NULL) {
@@ -357,7 +362,7 @@ int test_tree1()
             printf("NULL\n");
         }
     }
-  
+
     printf("\navanti 4\n");
     for(int h = 0; h < 4; h++) {
         if((n = moveNLR(it, AVANTI)) != NULL) {
@@ -367,10 +372,10 @@ int test_tree1()
             printf("NULL\n");
         }
     }
-  
+
     printf("\nora postorder\n");
 
-    it = gcreateitstato(n7);
+    it = gcreateit(n7);
 
     printf("\navanti 8\n");
     for(int h = 0; h < 8; h++) {
@@ -381,7 +386,7 @@ int test_tree1()
             printf("NULL\n");
         }
     }
-    it = gcreateitstato(n7);
+    it = gcreateit(n7);
     printf("\n nuovo indietro 6\n");
     for(int h = 0; h < 6; h++) {
         if((n = moveLRN(it, INDIETRO)) != NULL) {
@@ -390,7 +395,6 @@ int test_tree1()
         } else {
             printf("NULL\n");
         }
-      
     }
     printf("\navanti 5\n");
 
@@ -409,10 +413,10 @@ int test_tree1()
 
 int test_tree2()
 {
-  nodo* n7 = creatree();
+    nodo* n7 = creatree();
     int* n;
     printf("\nSUPERITER\n");
-    giterators* it = gcreateitmodo(n7,LNR,AVANTI);
+    giterators* it = gcreateitmodo(n7, LNR, AVANTI);
     printf("\navanti 7\n");
     for(int h = 0; h < 7; h++) {
         if((n = move(it)) != NULL) {
@@ -464,7 +468,6 @@ int test_insert()
         damm(n1, &numeri[i]);
     }
     miotempo("damm");
-
     return 0;
 }
 
@@ -504,6 +507,7 @@ char* expsym[] = { "/", "*", "+", "-" };
 
 int test_espr()
 {
+
     nodo* aa = creanodo(&numeri[0], NULL, NULL);
     aa->left = creanodo(&numeri[0], NULL, NULL);
     aa->left->left = creanodo(&numeri[4], NULL, NULL);
@@ -525,6 +529,51 @@ int test_espr()
     return 0;
 }
 
+long vv[1000000];
+int testbintree()
+{
+    printf("tempi test visita ricorsiva LNR e due iteratori su 10**6 elementi\n");
+    srand(1000); // seed iniziale per ripetibilita’
+    for(int i = 0; i < 1000000; i++) {
+        vv[i] = rand() % 10000000;
+        if(vv[i] == 0)
+            vv[i] = 1;
+    }
+    nodo* n = creanodo(&vv[0], NULL, NULL);
+    for(int i = 1; i < 1000000; i++) {
+        insert(n, (void*)vv[i]);
+    }
+
+    miotempo(NULL);
+    preorder(n);
+    miotempo("ric");
+    iterator* it = createit(n);
+    void* n1;
+    while((n1 = next(it)) != NULL) {
+        long rr = (long)n1;
+        // printf("%ld ", rr);
+    }
+    miotempo("ite");
+    giterators* it1 = gcreateitmodo(n, LNR, AVANTI);
+    while((n1 = move(it1)) != NULL) {
+        long rr = (long)n1;
+        // printf("%ld ", rr);
+    }
+    miotempo("itesuper");
+    printf("VA???\n");
+    nodo* m = crealbero();
+    stampaint(m, 0);
+    return 0;
+}
+
+int testcostruttore()
+{
+    printf("albero?\n");
+    nodo* m = crealberocostr();
+    stampaint(m, 0);
+    return 0;
+}
+
 int main(int argc, char** argv)
 {
     // bu();   testa buffer circolare
@@ -540,7 +589,7 @@ int main(int argc, char** argv)
      test_el_ord();
 
      test_el_ordnoh();
-     test_el_tempo();*/
+     test_el_tempo();
     test_tree();
     test_tree1();
     test_tree2();
@@ -548,5 +597,7 @@ int main(int argc, char** argv)
     test_merge();
     test_addrof();
     test_molti();
-    test_espr();
+    test_espr(); */
+    testbintree();
+    testcostruttore();
 }
