@@ -242,8 +242,35 @@ void* move(giterators* ite)
     glibera(ite);
     return NULL;
 }
+int never = 1;
+long pote[32];
+long tsize[32];
+
+void fill()
+{
+    for(long esp = 0; esp < 32; esp++) {
+        pote[esp] = (long)powl(2, esp);
+        tsize[esp] = (pote[esp] / 2) - 1;
+    }
+}
 
 long subtreesize(long pos)
+{ // trova altezza di un nodo nell'albero quanti discendeti ha al massimo
+    if(never) {
+        never = 0;
+        fill();
+    }
+    for(long esp = 2; esp < 32; esp++) {
+        // long pot = pote[esp];
+        long pp = tsize[esp];
+        if((pos - pp) % pote[esp] == 0) {
+            return pp;
+        }
+    }
+    return -1;
+}
+
+long subtreesizeLenta(long pos)
 { // volendo da ottimizzare con shift etc
     for(long esp = 2; esp < 32; esp++) {
         long pot = (long)powl(2, esp);

@@ -1,3 +1,4 @@
+#include "diz.h"
 #include "dynstring.h"
 
 #include <bintree.h>
@@ -507,7 +508,6 @@ char* expsym[] = { "/", "*", "+", "-" };
 
 int test_espr()
 {
-
     nodo* aa = creanodo(&numeri[0], NULL, NULL);
     aa->left = creanodo(&numeri[0], NULL, NULL);
     aa->left->left = creanodo(&numeri[4], NULL, NULL);
@@ -598,6 +598,7 @@ int main(int argc, char** argv)
     test_addrof();
     test_molti();
     test_espr(); */
-    testbintree();
-    testcostruttore();
+    //   testbintree();
+    //  testcostruttore();
+    testmany();
 }
