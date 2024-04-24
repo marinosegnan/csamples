@@ -1,3 +1,4 @@
+#include "coda.h"
 #include "dynstring.h"
 
 #include <assert.h>
@@ -19,6 +20,15 @@ typedef struct {
     nodo* n;
     int state;
 } nodestate;
+
+nodoparentesi* creapa(char c)
+{
+    nodoparentesi* ret = malloc(sizeof(nodoparentesi));
+    ret->parentesi = c;
+    ret->ele = (void*)0;
+    ret->elementi = create_coda();
+    return ret;
+}
 
 void dumps(pila* p)
 {
@@ -145,7 +155,7 @@ void stampaint(nodo* n, int inde)
         return;
     }
     stampaint(n->left, inde + 4);
-    for(int i = 0; i < 256; i++)
+    for(int i = 0; i < inde; i++)
         buf[i] = ' ';
     sprintf(buf + inde, "%ld", (long)n->mytype);
     printf("%s\n", buf);
@@ -176,14 +186,78 @@ nodo* treefromstring(char** curr)
     return ret;
 }
 
+nodoparentesi* parentesi(char** curr)
+{
+    // crea un albero di strutture governato da parentesi, il contentuo e' un singolo carattere
+    nodoparentesi* ret = NULL;
+    if(**curr == '(' || **curr == '{' || **curr == '[') {
+        char term = **curr == '(' ? ')' : (**curr == '{' ? '}' : ']');
+        ret = creapa(*(*curr)++);
+        while(**curr != term) {
+            append_el(ret->elementi, parentesi(curr));
+            if((*(*curr)++) == term) {
+                break;
+            }
+        }
+    } else {
+        ret = creapa('?');
+        ret->ele = (void*)*(*curr)++;
+    }
+    return ret;
+}
+
+nodoparentesi* parentesiSALVA(char** curr)
+{
+    nodoparentesi* ret = NULL;
+    if(**curr == '(' || **curr == '{' || **curr == '[') {
+        char term = **curr == '(' ? ')' : (**curr == '{' ? '}' : ']');
+        //   ret = creapa(**curr);
+        //   ++(*curr);
+        ret = creapa(*(*curr)++);
+
+        while(**curr != term) {
+            append_el(ret->elementi, parentesi(curr));
+            if((**curr) == term) {
+                ++(*curr);
+                break;
+            }
+            ++(*curr); // virgola
+        }
+    } else {
+        ret = creapa('?');
+        ret->ele = (void*)**curr;
+        ++(*curr);
+    }
+    return ret;
+}
+
+void stapa(nodoparentesi* np, int inde)
+{
+    for(int i = 0; i < inde; i++)
+        buf[i] = ' ';
+    sprintf(buf + inde, "%c\n", np->parentesi == '?' ? np->ele : np->parentesi);
+    printf("%s", buf);
+    elem* ee = np->elementi->last;
+    while(ee != NULL) {
+        stapa(ee->next->mytype, inde + 4);
+        ee = ee->next;
+        if(ee == np->elementi->last) {
+            break;
+        }
+    }
+}
+
 void recur(dynstringptr s, nodo* n)
 {
     char buf[10];
     if(n != NULL) {
-        append(s, "("), sprintf(buf, "%ld", (long)(n->mytype));
+        append(s, "(");
+        sprintf(buf, "%ld", (long)(n->mytype));
         append(s, buf);
-        append(s, ","), recur(s, n->left);
-        append(s, ","), recur(s, n->right);
+        append(s, ",");
+        recur(s, n->left);
+        append(s, ",");
+        recur(s, n->right);
         append(s, ")");
     } else {
         append(s, "N");

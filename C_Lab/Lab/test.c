@@ -575,6 +575,8 @@ int testcostruttore()
 }
 
 char* we = "(4,(7,(5,P,N),N),(8,N,N))";
+char* we1 = "(4,(7,(5,P,N),N),(8,N,N))";
+// char* we1 = "(1)";
 int testdastringa()
 {
     char* salva = we;
@@ -582,6 +584,9 @@ int testdastringa()
     stampaint(v, 0);
     char* contario = stringfromtree(v);
     printf(" %s %s\n", salva, contario);
+
+    nodoparentesi* np = parentesi(&we1);
+    stapa(np, 0);
     return 0;
 }
 

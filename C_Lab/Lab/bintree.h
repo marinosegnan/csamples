@@ -1,6 +1,7 @@
 #ifndef _BINTREE_H_
 #define _BINTREE_H_
 
+#include <coda.h>
 #include <elements.h>
 #include <pila.h>
 
@@ -14,6 +15,14 @@ typedef struct {
     pila* p;
     Nodostato stato;
 } iterators; // con attributo opportuno la pila fa da iteratore per alberi
+
+typedef struct {
+    // una struct che contiene un nodo e lo stato associato
+    // questa vwrsione ha uno stato per elemento pila, in realta' non serve, basta un solo stato
+    char parentesi;
+    void* ele;
+    coda* elementi;
+} nodoparentesi;
 
 void preorder(nodo* root);
 void postorder(nodo* root);
@@ -37,4 +46,6 @@ void stampaint(nodo* n, int inde);
 
 nodo* treefromstring(char** s);
 char* stringfromtree(nodo* n);
+nodoparentesi* parentesi(char** curr);
+void stapa(nodoparentesi* np, int level);
 #endif
