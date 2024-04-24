@@ -1,3 +1,5 @@
+#include "dynstring.h"
+
 #include <assert.h>
 #include <bintree.h>
 #include <stddef.h>
@@ -148,4 +150,49 @@ void stampaint(nodo* n, int inde)
     sprintf(buf + inde, "%ld", (long)n->mytype);
     printf("%s\n", buf);
     stampaint(n->right, inde + 4);
+}
+
+nodo* treefromstring(char** curr)
+{
+    nodoptr ret1 = NULL;
+    nodoptr ret2 = NULL;
+    nodoptr ret = NULL;
+    long num = -1;
+    //  printf("sono a: %s\n",s);
+    if(**curr == '(') {
+        ++(*curr);
+        num = (long*)((**curr) - '0');
+        ++(*curr); // una virgola
+        ++(*curr); // vai su aperta tonda
+        ret1 = treefromstring(curr);
+        ++(*curr); // una virgola
+        ++(*curr); // vai su aperta tonda
+        ret2 = treefromstring(curr);
+        ++(*curr); // una chiusa tonda
+        ret = creanodo((void*)num, ret1, ret2);
+    } else {
+        ; // e' NULL, o qualunque carartte non (
+    }
+    return ret;
+}
+
+void recur(dynstringptr s, nodo* n)
+{
+    char buf[10];
+    if(n != NULL) {
+        append(s, "("), sprintf(buf, "%ld", (long)(n->mytype));
+        append(s, buf);
+        append(s, ","), recur(s, n->left);
+        append(s, ","), recur(s, n->right);
+        append(s, ")");
+    } else {
+        append(s, "N");
+    }
+}
+
+char* stringfromtree(nodo* n)
+{
+    dynstringptr s = createstring(100);
+    recur(s, n);
+    return tocharstar(s);
 }

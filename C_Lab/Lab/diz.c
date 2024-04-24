@@ -1,10 +1,16 @@
 
 #include "diz.h"
 
-#include "stdlib.h"
+#include "bintree.h"
+#include "tempi.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define SZ 26
+
+#define BASE 'a'
 
 manyptr creamany(char val, int sz)
 {
@@ -26,7 +32,7 @@ manyptr creamany(char val, int sz)
 int addword(manyptr m, char* word)
 {
     if(*word != '\0') {
-        many** place = &(m->figli[*word - 'a']);
+        many** place = &(m->figli[*word - BASE]);
         int parola = *(word + 1) == '\0';
         if(*place != NULL) {
             if(parola && (*place)->isword) {
@@ -72,13 +78,65 @@ void printmany(manyptr m)
 
 int testmany()
 {
-
     manyptr uno = creamany('\0', 26);
     printf("%d\n", addword(uno, "aba"));
     printf("%d\n", addword(uno, "cici"));
     printf("%d\n", addword(uno, "aba"));
     printf("%d\n", addword(uno, "coco"));
-
     printmany(uno);
     return 0;
+}
+
+int insertP(nodo* root, char* parola)
+{
+    if(root == NULL) {
+        return -1;
+    }
+    nodo* tmp = root;
+    while(1) {
+        int val = strcmp(parola, (char*)(tmp->mytype));
+        if(val == 0) {
+            return 0;
+        }
+        if(val < 0) {
+            if(tmp->left != NULL) {
+                tmp = tmp->left;
+            } else {
+                tmp->left = creanodo(parola, NULL, NULL);
+                return 1;
+            }
+        } else {
+            if(tmp->right != NULL) {
+                tmp = tmp->right;
+            } else {
+                tmp->right = creanodo(parola, NULL, NULL);
+                return 1;
+            }
+        }
+    }
+}
+
+char* parole[100000];
+
+void confronta()
+{
+    /* commentata, la mia funzione funziona sullui caratteri alfabetici e non su cifre nuemriche
+    for (int i =0;i < 100000;i++){
+        parole[i] = malloc(10);
+        int j = rand() % 1000000;
+        sprintf(parole[i],"%d",j);
+    }
+    miotempo(NULL);
+    nodo *rad = creanodo(parole[0],NULL,NULL);
+    for (int i =1;i < 100000;i++){
+        insertP(rad,parole[i]);
+    }
+    miotempo("Binario");
+    manyptr uno = creamany('\0', 26);
+    for (int i =0;i < 100000;i++){
+      addword(uno, parole[i]);
+
+    }
+       miotempo("MOLTI");
+        * */
 }

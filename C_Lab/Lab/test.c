@@ -574,6 +574,17 @@ int testcostruttore()
     return 0;
 }
 
+char* we = "(4,(7,(5,P,N),N),(8,N,N))";
+int testdastringa()
+{
+    char* salva = we;
+    nodoptr v = treefromstring(&we);
+    stampaint(v, 0);
+    char* contario = stringfromtree(v);
+    printf(" %s %s\n", salva, contario);
+    return 0;
+}
+
 int main(int argc, char** argv)
 {
     // bu();   testa buffer circolare
@@ -598,7 +609,9 @@ int main(int argc, char** argv)
     test_addrof();
     test_molti();
     test_espr(); */
+    //   confronta();
     //   testbintree();
     //  testcostruttore();
     testmany();
+    testdastringa();
 }

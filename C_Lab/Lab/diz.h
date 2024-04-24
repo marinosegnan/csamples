@@ -14,5 +14,6 @@ manyptr creamany(char val, int sz);
 int addword(manyptr m, char* word);
 void printmany(manyptr m);
 int testmany();
+void confronta();
 
 #endif

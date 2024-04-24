@@ -34,4 +34,7 @@ void dumps(pila* p);
 void diffset(nodo* n1, nodo* n2);
 
 void stampaint(nodo* n, int inde);
+
+nodo* treefromstring(char** s);
+char* stringfromtree(nodo* n);
 #endif
