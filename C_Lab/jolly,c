@@ -1,0 +1,7 @@
+
+int prove(){
+    int a = 97
+    void * c = &a;
+    printf("%s\n",c);
+}
+

@@ -148,36 +148,47 @@ int damm(nodo* treePtr, void* value)
     return 1;
 }
 
-static char buf[256] = "";
+static char buf[256] = "                                                                           ";
+
 void stampaint(nodo* n, int inde)
 {
     if(n == NULL) {
         return;
     }
     stampaint(n->left, inde + 4);
-    for(int i = 0; i < inde; i++)
-        buf[i] = ' ';
-    sprintf(buf + inde, "%ld", (long)n->mytype);
-    printf("%s\n", buf);
+    printf("%.*s%ld\n",inde, buf,(long)n->mytype);
     stampaint(n->right, inde + 4);
 }
 
 nodo* treefromstring(char** curr)
 {
-    nodoptr ret1 = NULL;
-    nodoptr ret2 = NULL;
     nodoptr ret = NULL;
-    long num = -1;
-    //  printf("sono a: %s\n",s);
+    if(**curr == '(') {
+        long num = (long*)((*++(*curr)) - '0');
+        (*curr)+=2; // una virgola
+        nodoptr ret1 = treefromstring(curr);
+        (*curr)+=2; // vai su aperta tonda
+        nodoptr ret2 = treefromstring(curr);
+        ++(*curr); // una chiusa tonda
+        ret = creanodo((void*)num, ret1, ret2);
+    } else {
+        ; // e' NULL, o qualunque carartte non (
+    }
+    return ret;
+}
+
+nodo* treefromstringGOOD(char** curr)
+{
+    nodoptr ret = NULL;
     if(**curr == '(') {
         ++(*curr);
-        num = (long*)((**curr) - '0');
+        long num = (long*)((**curr) - '0');
         ++(*curr); // una virgola
         ++(*curr); // vai su aperta tonda
-        ret1 = treefromstring(curr);
+        nodoptr ret1 = treefromstring(curr);
         ++(*curr); // una virgola
         ++(*curr); // vai su aperta tonda
-        ret2 = treefromstring(curr);
+        nodoptr ret2 = treefromstring(curr);
         ++(*curr); // una chiusa tonda
         ret = creanodo((void*)num, ret1, ret2);
     } else {
@@ -206,37 +217,9 @@ nodoparentesi* parentesi(char** curr)
     return ret;
 }
 
-nodoparentesi* parentesiSALVA(char** curr)
-{
-    nodoparentesi* ret = NULL;
-    if(**curr == '(' || **curr == '{' || **curr == '[') {
-        char term = **curr == '(' ? ')' : (**curr == '{' ? '}' : ']');
-        //   ret = creapa(**curr);
-        //   ++(*curr);
-        ret = creapa(*(*curr)++);
-
-        while(**curr != term) {
-            append_el(ret->elementi, parentesi(curr));
-            if((**curr) == term) {
-                ++(*curr);
-                break;
-            }
-            ++(*curr); // virgola
-        }
-    } else {
-        ret = creapa('?');
-        ret->ele = (void*)**curr;
-        ++(*curr);
-    }
-    return ret;
-}
-
 void stapa(nodoparentesi* np, int inde)
 {
-    for(int i = 0; i < inde; i++)
-        buf[i] = ' ';
-    sprintf(buf + inde, "%c\n", np->parentesi == '?' ? np->ele : np->parentesi);
-    printf("%s", buf);
+    printf("%.*s%c\n",inde, buf, np->parentesi == '?' ? np->ele : np->parentesi);
     elem* ee = np->elementi->last;
     while(ee != NULL) {
         stapa(ee->next->mytype, inde + 4);
