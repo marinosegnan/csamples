@@ -190,7 +190,7 @@ Posizione ** gruppa(Cammino* camm)
 
 int main()
 {
-    leggidati("/home/marino/PycharmProjectslab2/lab2/zone.txt", &lista);
+    leggidati("/home/marino/PycharmProjects/diff3/zone.txt", &lista);
     printf("%d %d %d\n", lista.zone1.size, lista.zone2.size, lista.zone3.size);
     inizializza(lista.zone1.size, lista.zone2.size, lista.zone3.size);
     Posizione* partenza = creaposizione(0, 0, 0);
