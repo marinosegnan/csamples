@@ -1,0 +1,4 @@
+cc -DVELOCE=1 -O4 main.c tempi.c -lm
+#rm PRIMI/*
+a.out # 2 10
+#a.out 3 15485858	 1000000

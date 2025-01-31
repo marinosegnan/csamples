@@ -1,0 +1,3 @@
+cc -g -DVELOCE=1 main.c tempi.c -lm
+rm PRIMI/*
+valgrind a.out

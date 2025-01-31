@@ -1,0 +1,3 @@
+gcc -fprofile-arcs -ftest-coverage -g  main.c tempi.c -lm
+a.out
+ gcov  a-main  a-tempi > aa.txt
